@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SIZE_INCREMENT 5 
 #define SIZE_INITIAL 10
@@ -7,8 +8,8 @@
 
 typedef struct vector_ {
     int size; //size of the vector
-    int * a;
     int num_elements;
+    int * a;
 } vector;
 
 vector * create_vector (int size) 
@@ -16,12 +17,13 @@ vector * create_vector (int size)
     vector * vector = NULL;
     if(size)
     { 
-        vector = calloc(1, sizeof(vector));
-	vector->a = calloc(size, sizeof(int));
+        vector = malloc(sizeof(vector));
+	vector->a = (int *)calloc(size, sizeof(int));
         if (vector->a) 
         {
             vector->size = size;
             vector->num_elements = 0;
+            printf("\n init vector num_elements[%d]", vector->num_elements);
         }
     } else {
         vector = NULL;
@@ -63,7 +65,6 @@ void vector_print(vector * vec)
 int
 push_back (vector * vec, int value)
 {
-    int index = 0;
     if (vec->num_elements == vec->size)
     {
         //vector should grow by X amount.
@@ -75,10 +76,14 @@ push_back (vector * vec, int value)
         }
         vec->size += SIZE_INCREMENT;
     }
-    index = vec->num_elements;
-    printf("   index [%d]", index);
-    vec->a[index] = value; 
-    vec->num_elements++;
+
+    printf("address a[%p], a of offset[%p]", vec->a, (vec->a + vec->num_elements));
+    memcpy((vec->a + vec->num_elements), &value, sizeof(value)); 
+    printf("\n num_elements[%d]", vec->num_elements);
+
+    vec->num_elements = vec->num_elements + 1;
+
+    printf("\n num_elements[%d]", vec->num_elements);
     return 0;
 }
 
@@ -93,25 +98,20 @@ int main()
 
     //create a vector vec
     vector * vec = NULL;
-    vec = create_vector(5);
+    vec = create_vector(4);
     if (!vec)
     printf("\n FAILED");
 
-    vector_print(vec);
     
-    push_back(vec, 1); 
-    vector_print(vec);
-    push_back(vec, 2); 
-    vector_print(vec);
-    push_back(vec, 3); 
-    vector_print(vec);
     push_back(vec, 4); 
-    vector_print(vec);
     push_back(vec, 5); 
-    vector_print(vec);
     push_back(vec, 6); 
-    vector_print(vec);
     push_back(vec, 7); 
+    push_back(vec, 8); 
+    push_back(vec, 9); 
+    push_back(vec, 10); 
     vector_print(vec);
+
+    vector_destroy(vec);
    return 0; 
 }
