@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SIZE_INCREMENT 5 
+#define SIZE_INCREMENT 5*sizeof(int) 
 #define SIZE_INITIAL 10
 #define SIZE_MAX 1000
 
@@ -32,11 +32,6 @@ vector * create_vector (int size)
 }
 
 
-//inserts the element in the middle of the vector. 
-insert()
-{
-
-}
 
 //remove an element from the array
 erase()
@@ -77,14 +72,40 @@ push_back (vector * vec, int value)
         vec->size += SIZE_INCREMENT;
     }
 
-    printf("address a[%p], a of offset[%p]", vec->a, (vec->a + vec->num_elements));
     memcpy((vec->a + vec->num_elements), &value, sizeof(value)); 
-    printf("\n num_elements[%d]", vec->num_elements);
-
     vec->num_elements = vec->num_elements + 1;
 
-    printf("\n num_elements[%d]", vec->num_elements);
     return 0;
+}
+
+void shift_right(vector * vec, int index) 
+{
+    int i = 0;
+    if (vec->num_elements == vec->size) {
+        vec->a = realloc(vec->a, vec->size + SIZE_INCREMENT);
+    } 
+    for (i=vec->num_elements; i > index ; i--) 
+    {
+       printf("\na[i]%d a[i-1]%d", vec->a[i], vec->a[i-1] );
+       vec->a[i] = vec->a[i-1]; 
+    }
+}
+//inserts the element in the middle of the vector. 
+insert(vector * vec, int index, int value)
+{
+    if (index >= vec->num_elements) {
+        if (index == vec->num_elements) 
+        {
+             push_back(vec, value);      
+        } else {
+           printf("\nNOT ALLOWED");
+           return -1;
+        }
+    } else {
+        shift_right(vec, index);
+        vec->a[index] = value;
+        vec->num_elements++;
+    }
 }
 
 void vector_destroy(vector * vec) 
@@ -109,6 +130,7 @@ int main()
     push_back(vec, 7); 
     push_back(vec, 8); 
     push_back(vec, 9); 
+    insert(vec, 2, 11);
     push_back(vec, 10); 
     vector_print(vec);
 
