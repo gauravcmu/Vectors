@@ -32,7 +32,6 @@ dump_list(node * head)
     }
 }
 
-
 void 
 recursive_reverse(node **head)
 {
@@ -73,17 +72,48 @@ reverse(node **head)
     }
     *head = result;
 }
+void
+sorted_insert( node **head, int value)
+{
+    node * new_node;
+    node * temp = *head;
+    if ((*head == NULL) || ((*head)->value > value))
+    {
+       new_node = malloc(sizeof(node)); 
+       new_node->value = value;
+       new_node->next = *head;
+       *head = new_node;
+       return;
+    }
+
+    while((temp->next) && ((temp->next)->value < value)) {
+        temp = temp->next;
+    }
+
+    new_node = malloc(sizeof(node)); 
+    new_node->value = value;
+    new_node->next = temp->next;   
+    temp->next = new_node;
+}
 
 int main()
 {
   node * head = NULL;
+#if 0
   list_add_front(&head, 3); 
   list_add_front(&head, 4); 
   list_add_front(&head, 5); 
   list_add_front(&head, 6); 
   list_add_front(&head, 7); 
+#endif
+
+  sorted_insert(&head, 5);
+  sorted_insert(&head, 3);
+  sorted_insert(&head, 6);
+  sorted_insert(&head, 2);
+
   dump_list(head);
   
-  recursive_reverse(&head);  
-  dump_list(head);
+//  recursive_reverse(&head);  
+ // dump_list(head);
 }
