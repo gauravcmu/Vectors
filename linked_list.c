@@ -32,6 +32,32 @@ dump_list(node * head)
     }
 }
 
+
+void 
+recursive_reverse(node **head)
+{
+    node * left, * right;
+
+    if (*head == NULL)
+    { return ;}
+  
+    //left is head, right is assumed to be reversed list 
+
+    left = *head;
+    right = left->next;
+ 
+    if (right == NULL)
+    {
+       return;
+    }
+
+    recursive_reverse(&right); 
+  
+    left->next->next = left;    
+    left->next = NULL;
+    *head = right;
+}
+
 void 
 reverse(node **head)
 {
@@ -47,6 +73,7 @@ reverse(node **head)
     }
     *head = result;
 }
+
 int main()
 {
   node * head = NULL;
@@ -57,6 +84,6 @@ int main()
   list_add_front(&head, 7); 
   dump_list(head);
   
-  reverse(&head);  
+  recursive_reverse(&head);  
   dump_list(head);
 }
