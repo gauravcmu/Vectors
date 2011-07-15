@@ -32,6 +32,21 @@ dump_list(node * head)
     }
 }
 
+void 
+reverse(node **head)
+{
+    node * temp = *head;
+    node * next_temp;
+    node * result = NULL;
+  
+    while (temp) {
+        next_temp = temp->next;
+        temp->next = result;
+        result = temp;
+        temp = next_temp;
+    }
+    *head = result;
+}
 int main()
 {
   node * head = NULL;
@@ -40,5 +55,8 @@ int main()
   list_add_front(&head, 5); 
   list_add_front(&head, 6); 
   list_add_front(&head, 7); 
+  dump_list(head);
+  
+  reverse(&head);  
   dump_list(head);
 }
