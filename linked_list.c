@@ -147,29 +147,45 @@ remove_duplicates_from_sorted_list(node * head)
 
 //move first node from list head2 and prepend to head.
 void
-MoveNode(node ** head, node ** head2)
+MoveNode(node ** dest, node ** source)
 {
     node * save = NULL;
-    if ((*head == NULL) || (*head2 == NULL)) return;
+    if ((*source == NULL)) return;
    
-    save = *head2;
-    *head2 = save->next;   
-    save->next = *head;
-    *head = save; 
+    save = *source;
+    *source = save->next;   
+    save->next = *dest;
+    *dest = save; 
+}
+
+alternate_split(node ** source_list, node ** first, node ** second)
+{
+   if(*source_list == NULL) return; 
+ 
+   while (*source_list) {
+       MoveNode(first, source_list);
+       MoveNode(second, source_list);
+   }
 }
 
 int main()
 {
   node * head = NULL;
   node * head2 = NULL;
-#if 0
+  node * first = NULL;
+  node * second = NULL;
+
   list_add_front(&head, 3); 
   list_add_front(&head, 4); 
   list_add_front(&head, 5); 
   list_add_front(&head, 6); 
   list_add_front(&head, 7); 
-#endif
+  dump_list(head);
+  alternate_split(&head, &first, &second); 
+  dump_list(first);
+  dump_list(second);
 
+#if 0  
   list_add_front(&head, 3); 
   list_add_front(&head, 4); 
   list_add_front(&head, 5); 
@@ -184,6 +200,7 @@ int main()
   MoveNode(&head, &head2); 
   dump_list(head);
   dump_list(head2);
+#endif
 #if 0  
   remove_duplicates_from_sorted_list(head);
   dump_list(head);
