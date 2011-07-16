@@ -26,6 +26,7 @@ list_add_front(node ** head, int value)
 dump_list(node * head)
 {
     node * node_tmp = head;
+    printf("\n------\n");
     while(node_tmp) {
         printf("\n [%d]", node_tmp->value);
         node_tmp = node_tmp->next;
@@ -72,6 +73,7 @@ reverse(node **head)
     }
     *head = result;
 }
+
 void
 sorted_insert( node **head, int value)
 {
@@ -96,9 +98,37 @@ sorted_insert( node **head, int value)
     temp->next = new_node;
 }
 
+void
+splitList(node * head, node **head2)
+{
+    node * fast = NULL;
+    node  *slow = NULL;
+
+    if ((head == NULL) || (head->next == NULL))
+    {
+        *head2 = NULL;
+        return;
+    }
+
+    slow = head;
+    fast = head->next; 
+
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+    }
+   
+    *head2 = slow->next;
+    slow->next = NULL;
+}
+
 int main()
 {
   node * head = NULL;
+  node * head2 = NULL;
 #if 0
   list_add_front(&head, 3); 
   list_add_front(&head, 4); 
@@ -111,8 +141,15 @@ int main()
   sorted_insert(&head, 3);
   sorted_insert(&head, 6);
   sorted_insert(&head, 2);
-
+  sorted_insert(&head, 7);
+  sorted_insert(&head, 8);
+  sorted_insert(&head, 9);
   dump_list(head);
+  
+  splitList(head, &head2); 
+  dump_list(head);
+  dump_list(head2);
+  
   
 //  recursive_reverse(&head);  
  // dump_list(head);
