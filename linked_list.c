@@ -125,6 +125,39 @@ splitList(node * head, node **head2)
     slow->next = NULL;
 }
 
+void
+remove_duplicates_from_sorted_list(node * head)
+{
+   node *temp = head;
+   node * save = NULL;
+ 
+   if (temp == NULL) {
+       return; 
+   }
+
+   while ((temp->next)) {
+       if(temp->next->value == temp->value) {
+           save = temp->next;
+           temp->next = temp->next->next; 
+           free(save);
+       }
+       temp = temp->next;
+   }
+}
+
+//move first node from list head2 and prepend to head.
+void
+MoveNode(node ** head, node ** head2)
+{
+    node * save = NULL;
+    if ((*head == NULL) || (*head2 == NULL)) return;
+   
+    save = *head2;
+    *head2 = save->next;   
+    save->next = *head;
+    *head = save; 
+}
+
 int main()
 {
   node * head = NULL;
@@ -137,19 +170,30 @@ int main()
   list_add_front(&head, 7); 
 #endif
 
-  sorted_insert(&head, 5);
-  sorted_insert(&head, 3);
-  sorted_insert(&head, 6);
-  sorted_insert(&head, 2);
-  sorted_insert(&head, 7);
-  sorted_insert(&head, 8);
-  sorted_insert(&head, 9);
-  dump_list(head);
-  
-  splitList(head, &head2); 
+  list_add_front(&head, 3); 
+  list_add_front(&head, 4); 
+  list_add_front(&head, 5); 
+
+  sorted_insert(&head2, 2);
+  sorted_insert(&head2, 7);
+  sorted_insert(&head2, 8);
+  sorted_insert(&head2, 9);
   dump_list(head);
   dump_list(head2);
   
+  MoveNode(&head, &head2); 
+  dump_list(head);
+  dump_list(head2);
+#if 0  
+  remove_duplicates_from_sorted_list(head);
+  dump_list(head);
+#endif  
+
+#if 0  
+  splitList(head, &head2); 
+  dump_list(head);
+  dump_list(head2);
+#endif  
   
 //  recursive_reverse(&head);  
  // dump_list(head);
